@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Descargar codigo fuente del repositorio
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurar Node.js v18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
@@ -28,7 +28,7 @@ jobs:
         run: npm test -- --coverage
 
       - name: Cargar reporte de cobertura de pruebas
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: reporte-cobertura-jest
           path: coverage/
@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Descargar codigo fuente
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Desplegar en servidor de pruebas
         run: |
