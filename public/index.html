@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Donaciones Chihuahua | Casas Hogar y DIF</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Barra de navegacion superior -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-badge">Chihuahua</span>
+        <h1>Red Solidaria de Donaciones</h1>
+      </div>
+      <div class="user-actions">
+        <span id="userStatus" class="user-badge">Modo Visitante</span>
+        <button id="btnAuthModal" class="btn btn-primary">Iniciar Sesion / Registro</button>
+        <button id="btnLogout" class="btn btn-outline" style="display: none;">Cerrar Sesion</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Hero con resumen y semaforo -->
+    <section class="hero-section">
+      <div class="hero-text">
+        <h2>Mapa de Prioridad para Casas Hogar e Instituciones DIF</h2>
+        <p>Identifica de forma visual e inmediata que centros requieren apoyo urgente de ropa y juguetes para ninos y adolescentes en nuestra ciudad.</p>
+      </div>
+      <div class="traffic-legend">
+        <div class="legend-item"><span class="dot dot-green"></span> Verde: Abastecimiento suficiente</div>
+        <div class="legend-item"><span class="dot dot-yellow"></span> Amarillo: Necesidad moderada</div>
+        <div class="legend-item"><span class="dot dot-red"></span> Rojo: Prioridad alta (Urgente)</div>
+      </div>
+    </section>
+
+    <!-- Seccion del Mapa interactivo de Chihuahua -->
+    <section class="map-section">
+      <div class="card map-card">
+        <div class="card-header">
+          <h3>Geolocalizacion de Centros y Casas Hogar</h3>
+          <span class="hint">Haz clic en cada marcador para consultar necesidades o contactar por WhatsApp</span>
+        </div>
+        <div id="map" class="map-container"></div>
+      </div>
+    </section>
+
+    <!-- Cuadricula: Formulario de Donacion e Inventario -->
+    <section class="grid-section">
+      <!-- Formulario para donar -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Registrar Donacion</h3>
+          <span class="badge">Ropa y Juguetes</span>
+        </div>
+        <form id="formDonacion" class="form-grid">
+          <div class="form-group">
+            <label for="tipoDonacion">Tipo de bien:</label>
+            <select id="tipoDonacion" class="form-control" required>
+              <option value="ropa">Ropa infantil / juvenil</option>
+              <option value="juguete">Juguete didactico / recreativo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="categoriaDonacion">Categoria:</label>
+            <input type="text" id="categoriaDonacion" class="form-control" placeholder="Ej. Chamarras, calzado, juegos de mesa" required>
+          </div>
+
+          <div class="form-group" id="grupoTalla">
+            <label for="tallaDonacion">Talla de prenda:</label>
+            <input type="text" id="tallaDonacion" class="form-control" placeholder="Ej. Talla 6, 8, 10 o M juvenil">
+          </div>
+
+          <div class="form-group" id="grupoEstado">
+            <label for="estadoPrenda">Control de calidad (Estado):</label>
+            <select id="estadoPrenda" class="form-control">
+              <option value="excelente">Excelente (Nueva o casi nueva)</option>
+              <option value="bueno">Bueno (Limpia y lista para usar)</option>
+              <option value="regular">Regular (Requiere revision menor)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="institucionDestino">Institucion de destino:</label>
+            <select id="institucionDestino" class="form-control" required>
+              <option value="2">Casa Hogar de Ninas (Prioridad Roja)</option>
+              <option value="1">DIF Estatal Chihuahua (Prioridad Amarilla)</option>
+              <option value="4">Albergue Infantil San Vicente (Prioridad Amarilla)</option>
+              <option value="3">Casa Cuna de Chihuahua (Prioridad Verde)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nombreDonanteOpcional">Nombre de donante (Opcional):</label>
+            <input type="text" id="nombreDonanteOpcional" class="form-control" placeholder="Anonimo o tu nombre">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="descripcionDonacion">Descripcion detallada:</label>
+            <textarea id="descripcionDonacion" class="form-control" rows="3" placeholder="Detalles de los articulos, cantidad y observaciones..." required></textarea>
+          </div>
+
+          <div class="form-actions full-width">
+            <button type="submit" class="btn btn-primary">Registrar en Inventario</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Inventario actual y control de calidad -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Inventario Registrado</h3>
+          <button id="btnRecargarInventario" class="btn btn-sm btn-outline">Actualizar</button>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Descripcion</th>
+                <th>Talla / Detalle</th>
+                <th>Calidad</th>
+                <th>Destino</th>
+              </tr>
+            </thead>
+            <tbody id="tablaInventario">
+              <!-- Render dinamico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de Autenticacion JWT -->
+  <div id="modalAuth" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Iniciar Sesion</h3>
+        <span id="closeModal" class="close-btn">&times;</span>
+      </div>
+      <div class="modal-tabs">
+        <button id="tabLogin" class="tab-btn active">Iniciar Sesion</button>
+        <button id="tabRegister" class="tab-btn">Crear Cuenta</button>
+      </div>
+
+      <!-- Form Login -->
+      <form id="formLogin" class="modal-form">
+        <div class="form-group">
+          <label>Correo electronico:</label>
+          <input type="email" id="loginCorreo" class="form-control" placeholder="admin@donacioneschihuahua.org" required>
+        </div>
+        <div class="form-group">
+          <label>Contrasena:</label>
+          <input type="password" id="loginPass" class="form-control" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Ingresar con JWT</button>
+        <p class="auth-hint">Cuenta admin demo: admin@donacioneschihuahua.org / Admin123!</p>
+      </form>
+
+      <!-- Form Register -->
+      <form id="formRegister" class="modal-form" style="display: none;">
+        <div class="form-group">
+          <label>Nombre completo:</label>
+          <input type="text" id="regNombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Correo electronico:</label>
+          <input type="email" id="regCorreo" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Telefono de contacto:</label>
+          <input type="tel" id="regTelefono" class="form-control" placeholder="6141234567">
+        </div>
+        <div class="form-group">
+          <label>Contrasena:</label>
+          <input type="password" id="regPass" class="form-control" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-success full-width">Registrarme</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Proyecto Final de Ingenieria de Software | Manuel Ortega | Universidad Tecmilenio</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

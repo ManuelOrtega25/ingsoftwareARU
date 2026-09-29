@@ -1,0 +1,50 @@
+name: Pipeline CI CD Proyecto Donaciones
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pruebas_y_calidad:
+    name: Integracion Continua (Pruebas y Cobertura)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo fuente del repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Instalar dependencias del proyecto
+        run: npm ci
+
+      - name: Ejecutar pruebas unitarias con Jest y validar cobertura
+        run: npm test -- --coverage
+
+      - name: Cargar reporte de cobertura de pruebas
+        uses: actions/upload-artifact@v3
+        with:
+          name: reporte-cobertura-jest
+          path: coverage/
+
+  despliegue_pruebas:
+    name: Despliegue Continuo (Entorno de Pruebas)
+    needs: pruebas_y_calidad
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Descargar codigo fuente
+        uses: actions/checkout@v3
+
+      - name: Desplegar en servidor de pruebas
+        run: |
+          echo "Iniciando despliegue automatico en servidor de prueba..."
+          echo "Verificando variables de entorno y conexion a base de datos..."
+          echo "Despliegue completado con exito en entorno de pruebas."

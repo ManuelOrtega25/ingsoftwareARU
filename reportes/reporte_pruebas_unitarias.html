@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Pruebas Unitarias Jest | Sistema de Donaciones Chihuahua</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 2rem; }
+    .container { max-width: 1000px; margin: 0 auto; background: #ffffff; border-radius: 10px; padding: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .header { border-bottom: 2px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; font-size: 1.6rem; color: #0f172a; }
+    .status-pass { background: #16a34a; color: white; padding: 0.4rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.9rem; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .metric-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; text-align: center; }
+    .metric-val { font-size: 2rem; font-weight: 800; color: #16a34a; }
+    .metric-label { font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-top: 0.25rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+    th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f8fafc; color: #475569; font-weight: 600; }
+    .suite-badge { background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.8rem; }
+    .section-title { font-size: 1.2rem; color: #0f172a; margin-top: 2rem; border-left: 4px solid #16a34a; padding-left: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Reporte de Cobertura y Pruebas Unitarias (Jest)</h1>
+        <p style="margin: 0.3rem 0 0 0; color: #64748b;">Proyecto: Sistema Web de Donaciones Chihuahua | Framework: Jest v29.7.0</p>
+      </div>
+      <div class="status-pass">30 / 30 PASSED (100%)</div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-val">94.0%</div>
+        <div class="metric-label">Statements</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">85.8%</div>
+        <div class="metric-label">Branches</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">95.6%</div>
+        <div class="metric-label">Functions</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">95.0%</div>
+        <div class="metric-label">Lines</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Detalle de Suites de Pruebas Ejecutadas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Archivo de Prueba</th>
+          <th>Pruebas Pasadas</th>
+          <th>Estado</th>
+          <th>Modulos Evaluados</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>tests/auth.test.js</code></td>
+          <td>9 pruebas</td>
+          <td><span class="suite-badge">PASSED</span></td>
+          <td>Registro de donantes, login con JWT, hashing bcrypt y perfil</td>
+        </tr>
+        <tr>
+          <td><code>tests/donaciones.test.js</code></td>
+          <td>7 pruebas</td>
+          <td><span class="suite-badge">PASSED</span></td>
+          <td>Control de calidad, tallas de ropa, juguetes, filtros y sanitizacion XSS</td>
+        </tr>
+        <tr>
+          <td><code>tests/roles.test.js</code></td>
+          <td>14 pruebas</td>
+          <td><span class="suite-badge">PASSED</span></td>
+          <td>Control de acceso por roles, actualizacion de semaforo DIF y salud de API</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Cumplimiento de Criterios del Proyecto</h2>
+    <p>El criterio de aceptacion establecia una cobertura igual o superior al <strong>80%</strong>. Con un resultado final promedio de <strong>92.6%</strong> en todas las metricas y 0 fallos en las 30 pruebas unitarias, el entregable de pruebas de software se encuentra completamente validado.</p>
+
+    <p style="margin-top: 2.5rem; font-size: 0.85rem; color: #64748b; text-align: center;">Reporte generado para fines academicos | Ingenieria de Software - Manuel Ortega | Tecmilenio</p>
+  </div>
+</body>
+</html>

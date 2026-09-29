@@ -1,0 +1,47 @@
+{
+  "name": "sistema-donaciones-chihuahua",
+  "version": "1.0.0",
+  "description": "Sistema web para la administracion y distribucion de donaciones de ropa y juguetes para casas hogar y DIF en Chihuahua",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest --coverage"
+  },
+  "keywords": [
+    "donaciones",
+    "chihuahua",
+    "dif",
+    "casas-hogar",
+    "jwt",
+    "inventario"
+  ],
+  "author": "Manuel Ortega",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/models/db.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
+  }
+}

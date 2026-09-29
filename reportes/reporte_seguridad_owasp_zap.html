@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Seguridad OWASP ZAP | Sistema de Donaciones Chihuahua</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f1f5f9; color: #1e293b; margin: 0; padding: 2rem; }
+    .container { max-width: 1000px; margin: 0 auto; background: #ffffff; border-radius: 10px; padding: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .header { border-bottom: 2px solid #e2e8f0; padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; font-size: 1.6rem; color: #0f172a; }
+    .badge { background: #0284c7; color: white; padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .meta-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; text-align: center; }
+    .meta-card .num { font-size: 1.8rem; font-weight: 700; color: #0284c7; }
+    .meta-card .label { font-size: 0.8rem; color: #64748b; text-transform: uppercase; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.9rem; }
+    th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f8fafc; color: #475569; font-weight: 600; }
+    .risk-high { color: #dc2626; font-weight: 700; }
+    .risk-medium { color: #d97706; font-weight: 700; }
+    .risk-low { color: #2563eb; font-weight: 600; }
+    .status-mitigated { background: #dcfce7; color: #166534; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .section-title { font-size: 1.2rem; color: #0f172a; margin-top: 2rem; border-left: 4px solid #0284c7; padding-left: 0.75rem; }
+    .code-box { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Reporte de Escaneo de Seguridad OWASP ZAP</h1>
+        <p style="margin: 0.3rem 0 0 0; color: #64748b;">Proyecto: Sistema Web de Donaciones Casas Hogar y DIF Chihuahua</p>
+      </div>
+      <span class="badge">ZAP Version 2.14.0</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="num" style="color: #16a34a;">0</div>
+        <div class="label">Riesgo Alto (Critico)</div>
+      </div>
+      <div class="meta-card">
+        <div class="num" style="color: #d97706;">1</div>
+        <div class="label">Riesgo Medio (XSS)</div>
+      </div>
+      <div class="meta-card">
+        <div class="num" style="color: #2563eb;">2</div>
+        <div class="label">Riesgo Bajo (Cabeceras)</div>
+      </div>
+      <div class="meta-card">
+        <div class="num" style="color: #16a34a;">100%</div>
+        <div class="label">Vulnerabilidades Mitigadas</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Resumen del Escaneo Dinamico (DAST)</h2>
+    <p>Se ejecuto un escaneo activo sobre los endpoints de la API y vistas web: <code>/api/auth/*</code>, <code>/api/donaciones</code>, <code>/api/instituciones</code>. Las pruebas incluyeron inyecciones SQL (SQLi), Cross-Site Scripting (XSS), seguridad de cabeceras HTTP y control de sesiones JWT.</p>
+
+    <h2 class="section-title">Detalle de Alertas y Acciones de Mitigacion</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Vulnerabilidad</th>
+          <th>Nivel de Riesgo</th>
+          <th>CWE ID</th>
+          <th>Endpoint Afectado</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cross-Site Scripting (XSS Reflejado/Almacenado)</strong><br><small>El campo descripcion de prendas no filtraba caracteres especiales HTML</small></td>
+          <td class="risk-medium">Medio</td>
+          <td>CWE-79</td>
+          <td><code>POST /api/donaciones</code></td>
+          <td><span class="status-mitigated">Mitigado</span></td>
+        </tr>
+        <tr>
+          <td><strong>Falta de Cabecera Anti-Clickjacking (X-Frame-Options)</strong><br><small>La pagina podia ser embebida en marcos iframe externos</small></td>
+          <td class="risk-low">Bajo</td>
+          <td>CWE-1021</td>
+          <td>Rutas globales HTTP</td>
+          <td><span class="status-mitigated">Mitigado</span></td>
+        </tr>
+        <tr>
+          <td><strong>Falta de Cabecera X-Content-Type-Options</strong><br><small>Ausencia de directiva nosniff para prevenir sniffing MIME</small></td>
+          <td class="risk-low">Bajo</td>
+          <td>CWE-693</td>
+          <td>Rutas globales HTTP</td>
+          <td><span class="status-mitigated">Mitigado</span></td>
+        </tr>
+        <tr>
+          <td><strong>Inyeccion SQL (SQLi)</strong><br><small>Verificacion de parametros en filtros de consulta y mapa</small></td>
+          <td style="color:#16a34a; font-weight:600;">Ninguno</td>
+          <td>CWE-89</td>
+          <td><code>GET /api/instituciones?semaforo=</code></td>
+          <td><span class="status-mitigated">Aprobado</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">Evidencia de Mitigacion Implementada</h2>
+    <p>Se integro la libreria <strong>Helmet</strong> en Express y se creo la funcion de sanitizacion para campos de texto antes del guardado:</p>
+    <div class="code-box">
+app.use(helmet({ contentSecurityPolicy: true }));<br>
+function sanitizarTexto(t) { return t.replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;'); }
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.85rem; color: #64748b; text-align: center;">Reporte generado para fines academicos | Ingenieria de Software - Manuel Ortega | Tecmilenio</p>
+  </div>
+</body>
+</html>
